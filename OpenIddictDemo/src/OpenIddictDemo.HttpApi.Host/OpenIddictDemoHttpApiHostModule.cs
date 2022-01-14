@@ -97,9 +97,9 @@ namespace OpenIddictDemo
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            #region JWT
+            #region DisableAccessTokenEncryption
 
-            // Need OpenIddict Host disable `OpenIddictServerBuilder.DisableAccessTokenEncryption()`;
+            // OpenIddict Host enable `OpenIddictServerBuilder.DisableAccessTokenEncryption()`;
             //context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //    .AddJwtBearer(options =>
             //    {
@@ -108,9 +108,10 @@ namespace OpenIddictDemo
             //        options.Audience = OpenIddictDemoAuthConst.Audience;
             //    });
 
+
             #endregion
 
-            #region JWS
+            #region AccessTokenEncryption
 
             // OpenIddict Validation
             context.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
@@ -123,16 +124,23 @@ namespace OpenIddictDemo
 
                     // https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
 
+                    //https://github.com/openiddict/openiddict-samples/tree/dev/samples/Zirku
+
+                    #region Method 1 using Server EncryptionKey
+                    // Note: in a real world application, this encryption key should be
+                    // stored in a safe place (e.g in Azure KeyVault, stored as a secret).
+                    options.AddEncryptionKey(new SymmetricSecurityKey(
+                        Convert.FromBase64String(OpenIddictDemoAuthConst.EncryptionKey)));
+
+                    #endregion
+
+                    #region Method 2 using Introspection
                     // Configure the validation handler to use introspection and register the client
                     // credentials used when communicating with the remote introspection endpoint.
                     //options.UseIntrospection()
                     //       .SetClientId(configuration["AuthServer:SwaggerClientId"])
                     //       .SetClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-
-                    // Note: in a real world application, this encryption key should be
-                    // stored in a safe place (e.g in Azure KeyVault, stored as a secret).
-                    options.AddEncryptionKey(new SymmetricSecurityKey(
-                        Convert.FromBase64String(OpenIddictDemoAuthConst.EncryptionKey)));
+                    #endregion
 
                     // Register the System.Net.Http integration.
                     options.UseSystemNetHttp();

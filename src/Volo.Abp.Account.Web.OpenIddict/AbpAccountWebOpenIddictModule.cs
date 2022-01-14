@@ -93,6 +93,7 @@ namespace Volo.Abp.Account.Web
                     // Mark the "email", "profile", "roles", "phone" scopes as supported scopes.
                     options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles, Scopes.Phone);
 
+                    // https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
                     if (builderOptions.AddDeveloperSigningCredential)
                     {
                         // Register the signing and encryption credentials.
@@ -101,10 +102,24 @@ namespace Volo.Abp.Account.Web
                             .AddDevelopmentSigningCertificate();
                     }
 
+                    if (builderOptions.AddEphemeralEncryptionKey)
+                    {
+                        // Registering an ephemeral key.
+                        options
+                            .AddEphemeralEncryptionKey()
+                            .AddEphemeralSigningKey();
+                    }
+
                     if (builderOptions.RequireProofKeyForCodeExchange)
                     {
                         // Force client applications to use Proof Key for Code Exchange (PKCE).
                         options.RequireProofKeyForCodeExchange();
+                    }
+
+                    if (builderOptions.SupportPlainCodeChallengeMethod)
+                    {
+                        // https://documentation.openiddict.com/configuration/proof-key-for-code-exchange.html#enabling-codechallengemethodplain-support
+                        options.Configure(options => options.CodeChallengeMethods.Add(CodeChallengeMethods.Plain));
                     }
 
                     // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.

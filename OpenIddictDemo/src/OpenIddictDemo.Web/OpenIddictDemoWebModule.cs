@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -7,17 +5,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.OpenApi.Models;
 using OpenIddictDemo.Localization;
 using OpenIddictDemo.MultiTenancy;
 using OpenIddictDemo.Web.Menus;
 using StackExchange.Redis;
-using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
@@ -32,18 +31,12 @@ using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
-using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using System.Threading.Tasks;
-using System.Text;
-using System.Security.Cryptography;
-using IdentityModel;
 
 namespace OpenIddictDemo.Web
 {
@@ -147,7 +140,8 @@ namespace OpenIddictDemo.Web
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                    options.ResponseType = OpenIdConnectResponseType.Code;
+                    options.UsePkce = true;
 
                     options.ClientId = configuration["AuthServer:ClientId"];
                     options.ClientSecret = configuration["AuthServer:ClientSecret"];
@@ -159,49 +153,6 @@ namespace OpenIddictDemo.Web
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
                     options.Scope.Add(OpenIddictDemoAuthConst.ApplicationScope);
-
-                    options.Events.OnRedirectToIdentityProvider = context =>
-                    {
-                        // only modify requests to the authorization endpoint
-                        if (context.ProtocolMessage.RequestType != OpenIdConnectRequestType.Authentication)
-                            return Task.CompletedTask;
-
-                        // generate code_verifier
-                        var codeVerifier = CryptoRandom.CreateUniqueId(32);
-
-                        // store codeVerifier for later use
-                        context.Properties.Items.Add("code_verifier", codeVerifier);
-
-                        // create code_challenge
-                        string codeChallenge;
-                        using (var sha256 = SHA256.Create())
-                        {
-                            var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier));
-                            codeChallenge = Base64Url.Encode(challengeBytes);
-                        }
-
-                        // add code_challenge and code_challenge_method to request
-                        context.ProtocolMessage.Parameters.Add("code_challenge", codeChallenge);
-                        context.ProtocolMessage.Parameters.Add("code_challenge_method", "S256");
-
-                        return Task.CompletedTask;
-                    };
-
-                    options.Events.OnAuthorizationCodeReceived = context =>
-                    {
-                        // only when authorization code is being swapped for tokens
-                        if (context.TokenEndpointRequest?.GrantType != OpenIdConnectGrantTypes.AuthorizationCode)
-                            return Task.CompletedTask;
-
-                        // get stored code_verifier
-                        if (context.Properties.Items.TryGetValue("code_verifier", out var codeVerifier))
-                        {
-                            // add code_verifier to token request
-                            context.TokenEndpointRequest.Parameters.Add("code_verifier", codeVerifier);
-                        }
-
-                        return Task.CompletedTask;
-                    };
 
                     options.Events.OnSignedOutCallbackRedirect += context =>
                     {

@@ -54,7 +54,18 @@ namespace OpenIddictDemo.OpenIddict
 
         private async Task CreateScopeAsync()
         {
-            await CreateScopeAsync(OpenIddictDemoAuthConst.ApplicationScope, new[] { OpenIddictDemoAuthConst.Audience });
+            var resources = new List<string>();
+            resources.Add(OpenIddictDemoAuthConst.Audience);
+
+            // For HttpApi.Host introspection endpoint
+            var configurationSection = _configuration.GetSection("OpenIddictSeed:Applications");
+            var swaggerClientId = configurationSection["OpenIddictDemo_Swagger:ClientId"];
+            if (!swaggerClientId.IsNullOrWhiteSpace())
+            {
+                resources.Add(swaggerClientId);
+            }
+
+            await CreateScopeAsync(OpenIddictDemoAuthConst.ApplicationScope, resources);
         }
 
         private async Task CreateScopeAsync(string name, IEnumerable<string> resources)
@@ -315,7 +326,7 @@ namespace OpenIddictDemo.OpenIddict
                 await _permissionDataSeeder.SeedAsync(
                     ClientPermissionValueProvider.ProviderName,
                     name,
-                    appPermissions.Select(x=>x.Name),
+                    appPermissions.Select(x => x.Name),
                     null
                 );
             }
