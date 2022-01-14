@@ -38,5 +38,5 @@ src/Logs/logs.txt
 /.idea
 
 
-OpenIddictDemo/*.Web/Logs/*
-OpenIddictDemo/*.Host/Logs/*
+**/*.Web/Logs/*
+**/*.Host/Logs/*
