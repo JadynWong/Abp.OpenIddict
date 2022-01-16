@@ -32,10 +32,7 @@ namespace OpenIddictDemo.DbMigrator
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(build =>
-                {
-                    build.AddJsonFile("appsettings.secrets.json", optional: true);
-                })
+                .AddAppSettingsSecretsJson()
                 .ConfigureLogging((context, logging) => logging.ClearProviders())
                 .ConfigureServices((hostContext, services) =>
                 {

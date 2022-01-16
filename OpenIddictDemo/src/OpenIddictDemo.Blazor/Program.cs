@@ -16,7 +16,7 @@ namespace OpenIddictDemo.Blazor
 
             var host = builder.Build();
 
-            await application.InitializeAsync(host.Services);
+            await application.InitializeApplicationAsync(host.Services);
 
             await host.RunAsync();
         }

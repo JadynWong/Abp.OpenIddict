@@ -21,6 +21,7 @@ namespace OpenIddictDemo.HttpApi.Client.ConsoleTestApp
             using (var application = AbpApplicationFactory.Create<OpenIddictDemoConsoleApiClientModule>(options =>
             {
                 options.Services.ReplaceConfiguration(_configuration);
+                options.UseAutofac();
             }))
             {
                 application.Initialize();
