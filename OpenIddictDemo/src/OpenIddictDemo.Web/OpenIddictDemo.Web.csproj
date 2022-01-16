@@ -1,15 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>OpenIddictDemo.Web</RootNamespace>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
     <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
     <UserSecretsId>OpenIddictDemo-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
@@ -17,22 +16,22 @@
 
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.*" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.Swashbuckle" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.SettingManagement.Web" Version="4.4.4" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Web" Version="5.1.1" />
     <ProjectReference Include="..\OpenIddictDemo.HttpApi\OpenIddictDemo.HttpApi.csproj" />
     <ProjectReference Include="..\OpenIddictDemo.HttpApi.Client\OpenIddictDemo.HttpApi.Client.csproj" />
   </ItemGroup>

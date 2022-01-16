@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using IdentityModel;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,6 +20,7 @@ using Volo.Abp.TenantManagement.Blazor.WebAssembly;
 
 namespace OpenIddictDemo.Blazor
 {
+
     [DependsOn(
         typeof(AbpAutofacWebAssemblyModule),
         typeof(OpenIddictDemoHttpApiClientModule),
@@ -63,7 +64,7 @@ namespace OpenIddictDemo.Blazor
         private void ConfigureBlazorise(ServiceConfigurationContext context)
         {
             context.Services
-                .AddBootstrapProviders()
+                .AddBootstrap5Providers()
                 .AddFontAwesomeIcons();
         }
 

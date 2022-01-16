@@ -16,7 +16,7 @@
     <!-- For VisualStudio SourceLink Debug -->
     <!-- https://github.com/abpframework/abp/pull/7054 -->
     <!-- https://github.com/dotnet/sdk/issues/1458 -->
-    <PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3" PrivateAssets="All" />
+    <!-- <PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3" PrivateAssets="All" /> -->
   </ItemGroup>
 
 </Project>

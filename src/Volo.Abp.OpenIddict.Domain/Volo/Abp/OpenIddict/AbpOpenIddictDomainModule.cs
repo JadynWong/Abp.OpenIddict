@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Domain;
 using Volo.Abp.Identity;
@@ -43,20 +44,20 @@ namespace Volo.Abp.OpenIddict
             openIddictCoreBuilder.TryAddAbpMemoryStore();
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetRequiredService<IOptions<OpenIddictCleanupOptions>>().Value;
             var backgroundWorkerManager = context.ServiceProvider.GetRequiredService<IBackgroundWorkerManager>();
             if (options.IsCleanupAuthorizationEnabled)
             {
-                backgroundWorkerManager.Add(
+               await backgroundWorkerManager.AddAsync(
                     context.ServiceProvider
                         .GetRequiredService<OpenIddictAuthorizationCleanupBackgroundWorker>()
                 );
             }
             if (options.IsCleanupTokenEnabled)
             {
-                backgroundWorkerManager.Add(
+                await backgroundWorkerManager.AddAsync(
                     context.ServiceProvider
                         .GetRequiredService<OpenIddictTokenCleanupBackgroundWorker>()
                 );
