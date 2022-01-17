@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.BackgroundWorkers;
+﻿namespace Volo.Abp.OpenIddict;
 
-public class OpenIddictCleanupOptions
+public class AbpOpenIddictCleanupOptions
 {
     /// <summary>
     /// Default: 3,600,000 ms.

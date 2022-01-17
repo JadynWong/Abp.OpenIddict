@@ -112,11 +112,9 @@ public class EfCoreOpenIddictAuthorizationRepository
 
         return
             await (from authorization in query
-                   join token in dbContext.Tokens
-                              on authorization.Id equals token.AuthorizationId into tokens
                    where authorization.CreationDate < date
                    where authorization.Status != Statuses.Valid ||
-                        (authorization.Type == AuthorizationTypes.AdHoc && !tokens.Any())
+                        (authorization.Type == AuthorizationTypes.AdHoc && !dbContext.Tokens.Any(token => token.AuthorizationId == authorization.Id))
                    select authorization)
                    .OrderBy(x => x.Id)
                    .Take(maxResultCount)

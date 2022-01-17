@@ -19,14 +19,14 @@ public class AbpOpenIddictAuthorizationStore : OpenIddictAuthorizationStoreBase
 {
     protected IOpenIddictAuthorizationRepository AuthorizationRepository { get; }
 
-    protected OpenIddictCleanupOptions Options { get; }
+    protected AbpOpenIddictCleanupOptions Options { get; }
 
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public AbpOpenIddictAuthorizationStore(
         IGuidGenerator guidGenerator,
         IOpenIddictAuthorizationRepository openIddictAuthorizationRepository,
-        IOptions<OpenIddictCleanupOptions> options,
+        IOptions<AbpOpenIddictCleanupOptions> options,
         IUnitOfWorkManager unitOfWorkManager)
         : base(guidGenerator)
     {

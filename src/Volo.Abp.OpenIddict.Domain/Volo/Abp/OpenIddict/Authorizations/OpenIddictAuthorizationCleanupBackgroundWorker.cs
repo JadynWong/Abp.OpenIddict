@@ -9,12 +9,12 @@ namespace Volo.Abp.OpenIddict.Authorizations;
 
 public class OpenIddictAuthorizationCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
 {
-    protected OpenIddictCleanupOptions Options { get; }
+    protected AbpOpenIddictCleanupOptions Options { get; }
 
     public OpenIddictAuthorizationCleanupBackgroundWorker(
         AbpAsyncTimer timer,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<OpenIddictCleanupOptions> options)
+        IOptions<AbpOpenIddictCleanupOptions> options)
         : base(
             timer,
             serviceScopeFactory)

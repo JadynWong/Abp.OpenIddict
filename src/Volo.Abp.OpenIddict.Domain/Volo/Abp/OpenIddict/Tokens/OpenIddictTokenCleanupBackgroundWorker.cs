@@ -9,12 +9,12 @@ namespace Volo.Abp.OpenIddict.Tokens;
 
 public class OpenIddictTokenCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
 {
-    protected OpenIddictCleanupOptions Options { get; }
+    protected AbpOpenIddictCleanupOptions Options { get; }
 
     public OpenIddictTokenCleanupBackgroundWorker(
         AbpAsyncTimer timer,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<OpenIddictCleanupOptions> options)
+        IOptions<AbpOpenIddictCleanupOptions> options)
         : base(
             timer,
             serviceScopeFactory)

@@ -21,7 +21,6 @@ public class AbpOpenIddictDomainModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        context.Services.Configure<AbpOpenIddictOptions>(configuration.GetSection("OpenIddict"));
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -44,7 +43,7 @@ public class AbpOpenIddictDomainModule : AbpModule
 
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<OpenIddictCleanupOptions>>().Value;
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpOpenIddictCleanupOptions>>().Value;
         var backgroundWorkerManager = context.ServiceProvider.GetRequiredService<IBackgroundWorkerManager>();
         if (options.IsCleanupAuthorizationEnabled)
         {

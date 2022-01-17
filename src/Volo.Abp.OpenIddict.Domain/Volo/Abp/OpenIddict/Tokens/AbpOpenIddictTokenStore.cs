@@ -20,13 +20,13 @@ public class AbpOpenIddictTokenStore : OpenIddictTokenStoreBase
 
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-    protected OpenIddictCleanupOptions Options { get; }
+    protected AbpOpenIddictCleanupOptions Options { get; }
 
     public AbpOpenIddictTokenStore(
         IGuidGenerator guidGenerator,
         IOpenIddictTokenRepository tokenRepository,
         IUnitOfWorkManager unitOfWorkManager,
-        IOptions<OpenIddictCleanupOptions> options) : base(guidGenerator)
+        IOptions<AbpOpenIddictCleanupOptions> options) : base(guidGenerator)
     {
         TokenRepository = tokenRepository;
         UnitOfWorkManager = unitOfWorkManager;
