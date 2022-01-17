@@ -1,15 +1,14 @@
 ﻿using OpenIddictDemo.Localization;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace OpenIddictDemo.Controllers
+namespace OpenIddictDemo.Controllers;
+
+/* Inherit your controllers from this class.
+ */
+public abstract class OpenIddictDemoController : AbpController
 {
-    /* Inherit your controllers from this class.
-     */
-    public abstract class OpenIddictDemoController : AbpController
+    protected OpenIddictDemoController()
     {
-        protected OpenIddictDemoController()
-        {
-            LocalizationResource = typeof(OpenIddictDemoResource);
-        }
+        LocalizationResource = typeof(OpenIddictDemoResource);
     }
 }

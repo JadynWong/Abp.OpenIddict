@@ -14,33 +14,32 @@ using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+[DependsOn(
+    typeof(OpenIddictDemoDomainSharedModule),
+    typeof(AbpAuditLoggingDomainModule),
+    typeof(AbpBackgroundJobsDomainModule),
+    typeof(AbpFeatureManagementDomainModule),
+    typeof(AbpIdentityDomainModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpOpenIddictDomainModule),
+    typeof(AbpPermissionManagementDomainOpenIddictModule),
+    typeof(AbpSettingManagementDomainModule),
+    typeof(AbpTenantManagementDomainModule),
+    typeof(AbpEmailingModule)
+)]
+public class OpenIddictDemoDomainModule : AbpModule
 {
-    [DependsOn(
-        typeof(OpenIddictDemoDomainSharedModule),
-        typeof(AbpAuditLoggingDomainModule),
-        typeof(AbpBackgroundJobsDomainModule),
-        typeof(AbpFeatureManagementDomainModule),
-        typeof(AbpIdentityDomainModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpOpenIddictDomainModule),
-        typeof(AbpPermissionManagementDomainOpenIddictModule),
-        typeof(AbpSettingManagementDomainModule),
-        typeof(AbpTenantManagementDomainModule),
-        typeof(AbpEmailingModule)
-    )]
-    public class OpenIddictDemoDomainModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpMultiTenancyOptions>(options =>
         {
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
+            options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
 
 #if DEBUG
-            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
-        }
     }
 }

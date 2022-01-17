@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Volo.Abp.OpenIddict.Localization
+namespace Volo.Abp.OpenIddict.Localization;
+
+[LocalizationResourceName("AbpOpenIddict")]
+public class AbpOpenIddictResource
 {
-    [LocalizationResourceName("AbpOpenIddict")]
-    public class AbpOpenIddictResource
-    {
-        
-    }
+
 }

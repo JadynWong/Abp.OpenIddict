@@ -7,25 +7,24 @@ using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 
-namespace Volo.Abp.OpenIddict.MongoDB
+namespace Volo.Abp.OpenIddict.MongoDB;
+
+[IgnoreMultiTenancy]
+[ConnectionStringName(AbpOpenIddictDbProperties.ConnectionStringName)]
+public class OpenIddictMongoDbContext : AbpMongoDbContext, IOpenIddictMongoDbContext
 {
-    [IgnoreMultiTenancy]
-    [ConnectionStringName(AbpOpenIddictDbProperties.ConnectionStringName)]
-    public class OpenIddictMongoDbContext : AbpMongoDbContext, IOpenIddictMongoDbContext
+    public IMongoCollection<OpenIddictApplication> Applications => Collection<OpenIddictApplication>();
+
+    public IMongoCollection<OpenIddictAuthorization> Authorizations => Collection<OpenIddictAuthorization>();
+
+    public IMongoCollection<OpenIddictScope> Scopes => Collection<OpenIddictScope>();
+
+    public IMongoCollection<OpenIddictToken> Tokens => Collection<OpenIddictToken>();
+
+    protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
-        public IMongoCollection<OpenIddictApplication> Applications => Collection<OpenIddictApplication>();
+        base.CreateModel(modelBuilder);
 
-        public IMongoCollection<OpenIddictAuthorization> Authorizations => Collection<OpenIddictAuthorization>();
-
-        public IMongoCollection<OpenIddictScope> Scopes => Collection<OpenIddictScope>();
-
-        public IMongoCollection<OpenIddictToken> Tokens => Collection<OpenIddictToken>();
-
-        protected override void CreateModel(IMongoModelBuilder modelBuilder)
-        {
-            base.CreateModel(modelBuilder);
-
-            modelBuilder.ConfigureOpenIddict();
-        }
+        modelBuilder.ConfigureOpenIddict();
     }
 }

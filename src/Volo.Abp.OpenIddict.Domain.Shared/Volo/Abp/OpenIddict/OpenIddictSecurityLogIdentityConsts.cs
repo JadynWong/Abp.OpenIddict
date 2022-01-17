@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Volo.Abp.OpenIddict
+namespace Volo.Abp.OpenIddict;
+
+public static class OpenIddictSecurityLogIdentityConsts
 {
-    public static class OpenIddictSecurityLogIdentityConsts
-    {
-        public static string OpenIddict { get; set; } = "OpenIddict";
-    }
+    public static string OpenIddict { get; set; } = "OpenIddict";
 }

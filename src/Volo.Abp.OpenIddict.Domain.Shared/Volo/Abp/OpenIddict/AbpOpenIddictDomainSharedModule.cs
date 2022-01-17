@@ -7,32 +7,31 @@ using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.Validation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace Volo.Abp.OpenIddict
+namespace Volo.Abp.OpenIddict;
+
+[DependsOn(
+    typeof(AbpValidationModule),
+    typeof(AbpIdentityDomainSharedModule)
+)]
+public class AbpOpenIddictDomainSharedModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpValidationModule),
-        typeof(AbpIdentityDomainSharedModule)
-    )]
-    public class AbpOpenIddictDomainSharedModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpOpenIddictDomainSharedModule>();
-            });
+            options.FileSets.AddEmbedded<AbpOpenIddictDomainSharedModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<AbpOpenIddictResource>("en")
-                    .AddVirtualJson("/Localization/OpenIddict");
-            });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Add<AbpOpenIddictResource>("en")
+                .AddVirtualJson("/Localization/OpenIddict");
+        });
 
-            Configure<AbpExceptionLocalizationOptions>(options =>
-            {
-                options.MapCodeNamespace("OpenIddict", typeof(AbpOpenIddictResource));
-            });
-        }
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("OpenIddict", typeof(AbpOpenIddictResource));
+        });
     }
 }

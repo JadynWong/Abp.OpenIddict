@@ -1,7 +1,6 @@
-﻿namespace OpenIddictDemo
+﻿namespace OpenIddictDemo;
+
+public static class OpenIddictDemoDomainErrorCodes
 {
-    public static class OpenIddictDemoDomainErrorCodes
-    {
-        /* You can add your business exception error codes here, as constants */
-    }
+    /* You can add your business exception error codes here, as constants */
 }

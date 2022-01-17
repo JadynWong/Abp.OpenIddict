@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 
-namespace OpenIddictDemo.Web
+namespace OpenIddictDemo.Web;
+
+public class OpenIddictDemoWebAutoMapperProfile : Profile
 {
-    public class OpenIddictDemoWebAutoMapperProfile : Profile
+    public OpenIddictDemoWebAutoMapperProfile()
     {
-        public OpenIddictDemoWebAutoMapperProfile()
-        {
-            //Define your AutoMapper configuration here for the Web project.
-        }
+        //Define your AutoMapper configuration here for the Web project.
     }
 }

@@ -6,41 +6,40 @@ using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 
-namespace Volo.Abp.OpenIddict.MongoDB
+namespace Volo.Abp.OpenIddict.MongoDB;
+
+public static class OpenIddictMongoDbContextExtensions
 {
-    public static class OpenIddictMongoDbContextExtensions
+    public static void ConfigureOpenIddict(
+        this IMongoModelBuilder builder,
+        Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
     {
-        public static void ConfigureOpenIddict(
-            this IMongoModelBuilder builder,
-            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        var options = new OpenIddictMongoModelBuilderConfigurationOptions(
+            AbpOpenIddictDbProperties.DbTablePrefix
+        );
+
+        optionsAction?.Invoke(options);
+
+        builder.Entity<OpenIddictApplication>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.CollectionName = options.CollectionPrefix + "OpenIddictApplications";
+        });
 
-            var options = new OpenIddictMongoModelBuilderConfigurationOptions(
-                AbpOpenIddictDbProperties.DbTablePrefix
-            );
+        builder.Entity<OpenIddictAuthorization>(b =>
+        {
+            b.CollectionName = options.CollectionPrefix + "OpenIddictAuthorizations";
+        });
 
-            optionsAction?.Invoke(options);
+        builder.Entity<OpenIddictScope>(b =>
+        {
+            b.CollectionName = options.CollectionPrefix + "OpenIddictScopes";
+        });
 
-            builder.Entity<OpenIddictApplication>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "OpenIddictApplications";
-            });
-
-            builder.Entity<OpenIddictAuthorization>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "OpenIddictAuthorizations";
-            });
-
-            builder.Entity<OpenIddictScope>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "OpenIddictScopes";
-            });
-
-            builder.Entity<OpenIddictToken>(b =>
-            {
-                b.CollectionName = options.CollectionPrefix + "OpenIddictTokens";
-            });
-        }
+        builder.Entity<OpenIddictToken>(b =>
+        {
+            b.CollectionName = options.CollectionPrefix + "OpenIddictTokens";
+        });
     }
 }

@@ -3,29 +3,28 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Volo.Abp.Account.Web.AbpGrantTypes
+namespace Volo.Abp.Account.Web.AbpGrantTypes;
+
+public class AbpGrantTypeOptions
 {
-    public class AbpGrantTypeOptions
+    public Dictionary<string, Type> GrantTypeProviders { get; protected set; }
+
+    public AbpGrantTypeOptions()
     {
-        public Dictionary<string, Type> GrantTypeProviders { get; protected set; }
+        GrantTypeProviders = new Dictionary<string, Type>();
 
-        public AbpGrantTypeOptions()
-        {
-            GrantTypeProviders = new Dictionary<string, Type>();
+        Add<AbpPasswordGrantTypeProvider>(GrantTypes.Password);
+        Add<AbpClientCredentialsGrantTypeProvider>(GrantTypes.ClientCredentials);
+    }
 
-            Add<AbpPasswordGrantTypeProvider>(GrantTypes.Password);
-            Add<AbpClientCredentialsGrantTypeProvider>(GrantTypes.ClientCredentials);
-        }
+    public AbpGrantTypeOptions Add<TGrantTypeProvider>([NotNull] string grantType) where TGrantTypeProvider : IGrantTypeProvider
+    {
+        return Add(grantType, typeof(TGrantTypeProvider));
+    }
 
-        public AbpGrantTypeOptions Add<TGrantTypeProvider>([NotNull] string grantType) where TGrantTypeProvider : IGrantTypeProvider
-        {
-            return Add(grantType, typeof(TGrantTypeProvider));
-        }
-
-        public AbpGrantTypeOptions Add([NotNull] string grantType, [NotNull] Type grantTypeProviderType)
-        {
-            GrantTypeProviders[grantType] = grantTypeProviderType;
-            return this;
-        }
+    public AbpGrantTypeOptions Add([NotNull] string grantType, [NotNull] Type grantTypeProviderType)
+    {
+        GrantTypeProviders[grantType] = grantTypeProviderType;
+        return this;
     }
 }

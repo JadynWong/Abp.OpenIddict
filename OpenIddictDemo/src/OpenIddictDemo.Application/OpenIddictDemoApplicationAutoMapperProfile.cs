@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+public class OpenIddictDemoApplicationAutoMapperProfile : Profile
 {
-    public class OpenIddictDemoApplicationAutoMapperProfile : Profile
+    public OpenIddictDemoApplicationAutoMapperProfile()
     {
-        public OpenIddictDemoApplicationAutoMapperProfile()
-        {
-            /* You can configure your AutoMapper mapping configuration here.
-             * Alternatively, you can split your mapping configurations
-             * into multiple profile classes for a better organization. */
-        }
+        /* You can configure your AutoMapper mapping configuration here.
+         * Alternatively, you can split your mapping configurations
+         * into multiple profile classes for a better organization. */
     }
 }

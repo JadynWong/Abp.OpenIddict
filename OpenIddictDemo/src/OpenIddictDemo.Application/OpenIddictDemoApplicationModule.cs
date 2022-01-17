@@ -7,26 +7,25 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+[DependsOn(
+    typeof(OpenIddictDemoDomainModule),
+    typeof(AbpAccountApplicationModule),
+    typeof(OpenIddictDemoApplicationContractsModule),
+    typeof(AbpIdentityApplicationModule),
+    typeof(AbpPermissionManagementApplicationModule),
+    typeof(AbpTenantManagementApplicationModule),
+    typeof(AbpFeatureManagementApplicationModule),
+    typeof(AbpSettingManagementApplicationModule)
+    )]
+public class OpenIddictDemoApplicationModule : AbpModule
 {
-    [DependsOn(
-        typeof(OpenIddictDemoDomainModule),
-        typeof(AbpAccountApplicationModule),
-        typeof(OpenIddictDemoApplicationContractsModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpSettingManagementApplicationModule)
-        )]
-    public class OpenIddictDemoApplicationModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpAutoMapperOptions>(options =>
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<OpenIddictDemoApplicationModule>();
-            });
-        }
+            options.AddMaps<OpenIddictDemoApplicationModule>();
+        });
     }
 }

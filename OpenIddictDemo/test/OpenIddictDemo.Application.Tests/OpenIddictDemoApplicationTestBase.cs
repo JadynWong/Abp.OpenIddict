@@ -1,7 +1,6 @@
-﻿namespace OpenIddictDemo
-{
-    public abstract class OpenIddictDemoApplicationTestBase : OpenIddictDemoTestBase<OpenIddictDemoApplicationTestModule> 
-    {
+﻿namespace OpenIddictDemo;
 
-    }
+public abstract class OpenIddictDemoApplicationTestBase : OpenIddictDemoTestBase<OpenIddictDemoApplicationTestModule>
+{
+
 }

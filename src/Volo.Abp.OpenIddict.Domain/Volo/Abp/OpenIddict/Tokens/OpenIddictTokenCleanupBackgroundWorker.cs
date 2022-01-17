@@ -5,30 +5,29 @@ using OpenIddict.Abstractions;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.OpenIddict.Tokens
+namespace Volo.Abp.OpenIddict.Tokens;
+
+public class OpenIddictTokenCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
 {
-    public class OpenIddictTokenCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
+    protected OpenIddictCleanupOptions Options { get; }
+
+    public OpenIddictTokenCleanupBackgroundWorker(
+        AbpAsyncTimer timer,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<OpenIddictCleanupOptions> options)
+        : base(
+            timer,
+            serviceScopeFactory)
     {
-        protected OpenIddictCleanupOptions Options { get; }
+        Options = options.Value;
+        timer.Period = Options.CleanupPeriod;
+    }
 
-        public OpenIddictTokenCleanupBackgroundWorker(
-            AbpAsyncTimer timer,
-            IServiceScopeFactory serviceScopeFactory,
-            IOptions<OpenIddictCleanupOptions> options)
-            : base(
-                timer,
-                serviceScopeFactory)
-        {
-            Options = options.Value;
-            timer.Period = Options.CleanupPeriod;
-        }
-
-        protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
-        {
-            await workerContext
-                .ServiceProvider
-                .GetRequiredService<IOpenIddictTokenManager>()
-                .PruneAsync(System.DateTimeOffset.UtcNow);
-        }
+    protected async override Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+    {
+        await workerContext
+            .ServiceProvider
+            .GetRequiredService<IOpenIddictTokenManager>()
+            .PruneAsync(System.DateTimeOffset.UtcNow);
     }
 }

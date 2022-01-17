@@ -6,26 +6,25 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Modularity;
 
-namespace OpenIddictDemo.HttpApi.Client.ConsoleTestApp
+namespace OpenIddictDemo.HttpApi.Client.ConsoleTestApp;
+
+[DependsOn(
+    typeof(AbpAutofacModule),
+    typeof(OpenIddictDemoHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelModule)
+    )]
+public class OpenIddictDemoConsoleApiClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(OpenIddictDemoHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule)
-        )]
-    public class OpenIddictDemoConsoleApiClientModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<AbpHttpClientBuilderOptions>(options =>
         {
-            PreConfigure<AbpHttpClientBuilderOptions>(options =>
+            options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
             {
-                options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
-                {
-                    clientBuilder.AddTransientHttpErrorPolicy(
-                        policyBuilder => policyBuilder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i)))
-                    );
-                });
+                clientBuilder.AddTransientHttpErrorPolicy(
+                    policyBuilder => policyBuilder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i)))
+                );
             });
-        }
+        });
     }
 }

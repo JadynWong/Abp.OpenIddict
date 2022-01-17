@@ -1,24 +1,23 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace OpenIddictDemo.Blazor
+namespace OpenIddictDemo.Blazor;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static async Task Main(string[] args)
+        var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+        var application = builder.AddApplication<OpenIddictDemoBlazorModule>(options =>
         {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            options.UseAutofac();
+        });
 
-            var application = builder.AddApplication<OpenIddictDemoBlazorModule>(options =>
-            {
-                options.UseAutofac();
-            });
+        var host = builder.Build();
 
-            var host = builder.Build();
+        await application.InitializeApplicationAsync(host.Services);
 
-            await application.InitializeApplicationAsync(host.Services);
-
-            await host.RunAsync();
-        }
+        await host.RunAsync();
     }
 }

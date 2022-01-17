@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace OpenIddictDemo.Data
+namespace OpenIddictDemo.Data;
+
+public interface IOpenIddictDemoDbSchemaMigrator
 {
-    public interface IOpenIddictDemoDbSchemaMigrator
-    {
-        Task MigrateAsync();
-    }
+    Task MigrateAsync();
 }

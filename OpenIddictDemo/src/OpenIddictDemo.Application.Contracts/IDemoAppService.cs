@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+public interface IDemoAppService : IApplicationService
 {
-    public interface IDemoAppService : IApplicationService
-    {
-        Task<DemoDto> GetAsync();
-    }
+    Task<DemoDto> GetAsync();
 }

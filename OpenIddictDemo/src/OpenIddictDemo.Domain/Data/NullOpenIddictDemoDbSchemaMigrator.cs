@@ -1,16 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace OpenIddictDemo.Data
+namespace OpenIddictDemo.Data;
+
+/* This is used if database provider does't define
+ * IOpenIddictDemoDbSchemaMigrator implementation.
+ */
+public class NullOpenIddictDemoDbSchemaMigrator : IOpenIddictDemoDbSchemaMigrator, ITransientDependency
 {
-    /* This is used if database provider does't define
-     * IOpenIddictDemoDbSchemaMigrator implementation.
-     */
-    public class NullOpenIddictDemoDbSchemaMigrator : IOpenIddictDemoDbSchemaMigrator, ITransientDependency
+    public Task MigrateAsync()
     {
-        public Task MigrateAsync()
-        {
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

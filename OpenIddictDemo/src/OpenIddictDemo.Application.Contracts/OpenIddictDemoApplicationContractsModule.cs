@@ -7,23 +7,22 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+[DependsOn(
+    typeof(OpenIddictDemoDomainSharedModule),
+    typeof(AbpAccountApplicationContractsModule),
+    typeof(AbpFeatureManagementApplicationContractsModule),
+    typeof(AbpIdentityApplicationContractsModule),
+    typeof(AbpPermissionManagementApplicationContractsModule),
+    typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(AbpTenantManagementApplicationContractsModule),
+    typeof(AbpObjectExtendingModule)
+)]
+public class OpenIddictDemoApplicationContractsModule : AbpModule
 {
-    [DependsOn(
-        typeof(OpenIddictDemoDomainSharedModule),
-        typeof(AbpAccountApplicationContractsModule),
-        typeof(AbpFeatureManagementApplicationContractsModule),
-        typeof(AbpIdentityApplicationContractsModule),
-        typeof(AbpPermissionManagementApplicationContractsModule),
-        typeof(AbpSettingManagementApplicationContractsModule),
-        typeof(AbpTenantManagementApplicationContractsModule),
-        typeof(AbpObjectExtendingModule)
-    )]
-    public class OpenIddictDemoApplicationContractsModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            OpenIddictDemoDtoExtensions.Configure();
-        }
+        OpenIddictDemoDtoExtensions.Configure();
     }
 }

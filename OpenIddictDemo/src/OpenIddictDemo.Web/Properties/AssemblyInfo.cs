@@ -1,2 +1,2 @@
 ﻿using System.Runtime.CompilerServices;
-[assembly:InternalsVisibleToAttribute("OpenIddictDemo.Web.Tests")]
+[assembly: InternalsVisibleToAttribute("OpenIddictDemo.Web.Tests")]

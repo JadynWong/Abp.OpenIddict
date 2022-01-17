@@ -1,14 +1,13 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.OpenIddict.MongoDB
+namespace Volo.Abp.OpenIddict.MongoDB;
+
+public class OpenIddictMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
 {
-    public class OpenIddictMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
+    public OpenIddictMongoModelBuilderConfigurationOptions(
+        [NotNull] string collectionPrefix = "")
+        : base(collectionPrefix)
     {
-        public OpenIddictMongoModelBuilderConfigurationOptions(
-            [NotNull] string collectionPrefix = "")
-            : base(collectionPrefix)
-        {
-        }
     }
 }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+public class DemoDto
 {
-    public class DemoDto
-    {
-        public string ClientId { get; set; }
-    }
+    public string ClientId { get; set; }
 }

@@ -1,11 +1,10 @@
-﻿namespace OpenIddictDemo.Web.Menus
+﻿namespace OpenIddictDemo.Web.Menus;
+
+public class OpenIddictDemoMenus
 {
-    public class OpenIddictDemoMenus
-    {
-        private const string Prefix = "OpenIddictDemo";
-        public const string Home = Prefix + ".Home";
+    private const string Prefix = "OpenIddictDemo";
+    public const string Home = Prefix + ".Home";
 
-        //Add your menu items here...
+    //Add your menu items here...
 
-    }
 }

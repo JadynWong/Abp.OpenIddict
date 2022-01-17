@@ -4,15 +4,14 @@ using System.Text;
 using OpenIddictDemo.Localization;
 using Volo.Abp.Application.Services;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+/* Inherit your application services from this class.
+ */
+public abstract class OpenIddictDemoAppService : ApplicationService
 {
-    /* Inherit your application services from this class.
-     */
-    public abstract class OpenIddictDemoAppService : ApplicationService
+    protected OpenIddictDemoAppService()
     {
-        protected OpenIddictDemoAppService()
-        {
-            LocalizationResource = typeof(OpenIddictDemoResource);
-        }
+        LocalizationResource = typeof(OpenIddictDemoResource);
     }
 }

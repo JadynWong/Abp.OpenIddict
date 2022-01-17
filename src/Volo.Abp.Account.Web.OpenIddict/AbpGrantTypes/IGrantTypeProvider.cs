@@ -1,12 +1,11 @@
-﻿using OpenIddict.Abstractions;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using OpenIddict.Abstractions;
 
-namespace Volo.Abp.Account.Web.AbpGrantTypes
+namespace Volo.Abp.Account.Web.AbpGrantTypes;
+
+public interface IGrantTypeProvider
 {
-    public interface IGrantTypeProvider
-    {
-        string GrantType { get; }
+    string GrantType { get; }
 
-        Task<GrantTypeResult> HandleAsync(OpenIddictRequest request);
-    }
+    Task<GrantTypeResult> HandleAsync(OpenIddictRequest request);
 }

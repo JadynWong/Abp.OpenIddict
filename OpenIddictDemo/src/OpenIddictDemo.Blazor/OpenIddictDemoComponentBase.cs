@@ -1,13 +1,12 @@
 ﻿using OpenIddictDemo.Localization;
 using Volo.Abp.AspNetCore.Components;
 
-namespace OpenIddictDemo.Blazor
+namespace OpenIddictDemo.Blazor;
+
+public abstract class OpenIddictDemoComponentBase : AbpComponentBase
 {
-    public abstract class OpenIddictDemoComponentBase : AbpComponentBase
+    protected OpenIddictDemoComponentBase()
     {
-        protected OpenIddictDemoComponentBase()
-        {
-            LocalizationResource = typeof(OpenIddictDemoResource);
-        }
+        LocalizationResource = typeof(OpenIddictDemoResource);
     }
 }

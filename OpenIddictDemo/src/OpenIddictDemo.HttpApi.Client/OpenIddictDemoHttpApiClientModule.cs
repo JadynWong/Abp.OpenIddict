@@ -4,30 +4,29 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 
-namespace OpenIddictDemo
+namespace OpenIddictDemo;
+
+[DependsOn(
+    typeof(OpenIddictDemoApplicationContractsModule),
+    typeof(AbpAccountHttpApiClientModule),
+    typeof(AbpIdentityHttpApiClientModule),
+    typeof(AbpPermissionManagementHttpApiClientModule),
+    typeof(AbpTenantManagementHttpApiClientModule),
+    typeof(AbpFeatureManagementHttpApiClientModule),
+    typeof(AbpSettingManagementHttpApiClientModule)
+)]
+public class OpenIddictDemoHttpApiClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(OpenIddictDemoApplicationContractsModule),
-        typeof(AbpAccountHttpApiClientModule),
-        typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule),
-        typeof(AbpTenantManagementHttpApiClientModule),
-        typeof(AbpFeatureManagementHttpApiClientModule),
-        typeof(AbpSettingManagementHttpApiClientModule)
-    )]
-    public class OpenIddictDemoHttpApiClientModule : AbpModule
-    {
-        public const string RemoteServiceName = "Default";
+    public const string RemoteServiceName = "Default";
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddHttpClientProxies(
-                typeof(OpenIddictDemoApplicationContractsModule).Assembly,
-                RemoteServiceName
-            );
-        }
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddHttpClientProxies(
+            typeof(OpenIddictDemoApplicationContractsModule).Assembly,
+            RemoteServiceName
+        );
     }
 }

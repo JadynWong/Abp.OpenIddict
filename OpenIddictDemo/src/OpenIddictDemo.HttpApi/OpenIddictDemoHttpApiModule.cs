@@ -9,34 +9,33 @@ using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
-namespace OpenIddictDemo
-{
-    [DependsOn(
-        typeof(OpenIddictDemoApplicationContractsModule),
-        typeof(AbpAccountHttpApiModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpFeatureManagementHttpApiModule),
-        typeof(AbpSettingManagementHttpApiModule)
-        )]
-    public class OpenIddictDemoHttpApiModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            ConfigureLocalization();
-        }
+namespace OpenIddictDemo;
 
-        private void ConfigureLocalization()
+[DependsOn(
+    typeof(OpenIddictDemoApplicationContractsModule),
+    typeof(AbpAccountHttpApiModule),
+    typeof(AbpIdentityHttpApiModule),
+    typeof(AbpPermissionManagementHttpApiModule),
+    typeof(AbpTenantManagementHttpApiModule),
+    typeof(AbpFeatureManagementHttpApiModule),
+    typeof(AbpSettingManagementHttpApiModule)
+    )]
+public class OpenIddictDemoHttpApiModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        ConfigureLocalization();
+    }
+
+    private void ConfigureLocalization()
+    {
+        Configure<AbpLocalizationOptions>(options =>
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<OpenIddictDemoResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
-        }
+            options.Resources
+                .Get<OpenIddictDemoResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
+        });
     }
 }

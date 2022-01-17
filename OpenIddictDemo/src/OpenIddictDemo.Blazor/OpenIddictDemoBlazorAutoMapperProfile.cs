@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 
-namespace OpenIddictDemo.Blazor
+namespace OpenIddictDemo.Blazor;
+
+public class OpenIddictDemoBlazorAutoMapperProfile : Profile
 {
-    public class OpenIddictDemoBlazorAutoMapperProfile : Profile
+    public OpenIddictDemoBlazorAutoMapperProfile()
     {
-        public OpenIddictDemoBlazorAutoMapperProfile()
-        {
-            //Define your AutoMapper configuration here for the Blazor project.
-        }
+        //Define your AutoMapper configuration here for the Blazor project.
     }
 }

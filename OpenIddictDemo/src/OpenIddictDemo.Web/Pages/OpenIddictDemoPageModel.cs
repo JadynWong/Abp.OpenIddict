@@ -1,13 +1,12 @@
 ﻿using OpenIddictDemo.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace OpenIddictDemo.Web.Pages
+namespace OpenIddictDemo.Web.Pages;
+
+public abstract class OpenIddictDemoPageModel : AbpPageModel
 {
-    public abstract class OpenIddictDemoPageModel : AbpPageModel
+    protected OpenIddictDemoPageModel()
     {
-        protected OpenIddictDemoPageModel()
-        {
-            LocalizationResourceType = typeof(OpenIddictDemoResource);
-        }
+        LocalizationResourceType = typeof(OpenIddictDemoResource);
     }
 }

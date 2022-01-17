@@ -1,11 +1,10 @@
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace OpenIddictDemo.Pages
+namespace OpenIddictDemo.Pages;
+
+public class IndexModel : AbpPageModel
 {
-    public class IndexModel : AbpPageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-        }
     }
 }
