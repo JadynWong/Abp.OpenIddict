@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Volo.Abp.MongoDB" Version="5.1.1" />
+    <PackageReference Include="Volo.Abp.MongoDB" Version="5.1.1" />
     <ProjectReference Include="..\Volo.Abp.OpenIddict.Domain\Volo.Abp.OpenIddict.Domain.csproj" />
   </ItemGroup>
 

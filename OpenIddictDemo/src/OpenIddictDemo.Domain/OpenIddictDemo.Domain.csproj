@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\..\..\src\Volo.Abp.OpenIddict.Domain\Volo.Abp.OpenIddict.Domain.csproj" />
-	<ProjectReference Include="..\..\..\src\Volo.Abp.PermissionManagement.Domain.OpenIddict\Volo.Abp.PermissionManagement.Domain.OpenIddict.csproj" />
+    <ProjectReference Include="..\..\..\src\Volo.Abp.OpenIddict.Domain\Volo.Abp.OpenIddict.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Volo.Abp.PermissionManagement.Domain.OpenIddict\Volo.Abp.PermissionManagement.Domain.OpenIddict.csproj" />
     <PackageReference Include="Volo.Abp.Emailing" Version="5.1.1" />
     <PackageReference Include="Volo.Abp.Identity.Domain" Version="5.1.1" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="5.1.1" />
