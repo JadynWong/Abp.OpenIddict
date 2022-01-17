@@ -21,14 +21,18 @@ public class AbpOpenIddictAuthorizationStore : OpenIddictAuthorizationStoreBase
 
     protected OpenIddictCleanupOptions Options { get; }
 
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
     public AbpOpenIddictAuthorizationStore(
         IGuidGenerator guidGenerator,
         IOpenIddictAuthorizationRepository openIddictAuthorizationRepository,
-        IOptions<OpenIddictCleanupOptions> options)
+        IOptions<OpenIddictCleanupOptions> options,
+        IUnitOfWorkManager unitOfWorkManager)
         : base(guidGenerator)
     {
         AuthorizationRepository = openIddictAuthorizationRepository;
         Options = options.Value;
+        UnitOfWorkManager = unitOfWorkManager;
     }
 
     /// <inheritdoc/>
@@ -50,37 +54,51 @@ public class AbpOpenIddictAuthorizationStore : OpenIddictAuthorizationStoreBase
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask CreateAsync(OpenIddictAuthorization authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await AuthorizationRepository.InsertAsync(authorization, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask UpdateAsync(OpenIddictAuthorization authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await AuthorizationRepository.UpdateAsync(authorization, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask DeleteAsync(OpenIddictAuthorization authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await AuthorizationRepository.DeleteAsync(authorization, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
         List<Exception> exceptions = null;
+
+        using var unitOfWork = UnitOfWorkManager.Begin();
 
         for (var index = 0; index < Options.CleanupLoopCount; index++)
         {
@@ -96,7 +114,7 @@ public class AbpOpenIddictAuthorizationStore : OpenIddictAuthorizationStoreBase
 
             try
             {
-                await AuthorizationRepository.DeleteManyAsync(authorizations);
+                await AuthorizationRepository.DeleteManyAsync(authorizations, true, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -109,6 +127,8 @@ public class AbpOpenIddictAuthorizationStore : OpenIddictAuthorizationStoreBase
         {
             throw new AggregateException(SR.GetResourceString(SR.ID0243), exceptions);
         }
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>

@@ -5,6 +5,12 @@
     "Deny": "拒绝",
     "Submit": "提交",
     "ScopesOfRequest": "申请的范围",
-    "IsRequestingAccessToYourData": "正在申请访问你的数据"
+    "IsRequestingAccessToYourData": "正在申请访问你的数据",
+    "Authorization": "授权",
+    "EnterTheUserCodeGivenByTheClientApplication": "输入客户端应用程序给出的用户代码",
+    "AnErrorOccurred": "发生了一个错误",
+    "DoYouWantToGrantApplicationAccessToYourData": "你想让<strong>{0}</strong>访问你的数据吗?",
+    "MakeSureThatTheCodeDisplayedOnTheDeviceIsUserCode": "确保设备上显示的代码是<strong>{0}</strong>.",
+    "IfTheTwoCodesDoNotMatchPressDenyToRejectTheAuthorizationDemand": "如果两个代码不匹配, 按\"拒绝\"拒绝授权要求."
   }
 }

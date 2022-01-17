@@ -6,8 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
-using Volo.Abp.OpenIddict.Authorizations;
-using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.Uow;
 using SR = OpenIddict.Abstractions.OpenIddictResources;
 
@@ -17,19 +15,17 @@ namespace Volo.Abp.OpenIddict.Applications;
 public class AbpOpenIddictApplicationStore : OpenIddictApplicationStoreBase
 {
     protected IOpenIddictApplicationRepository ApplicationRepository { get; }
-    protected IOpenIddictAuthorizationRepository OpenIddictAuthorizationRepository { get; }
-    protected IOpenIddictTokenRepository OpenIddictTokenRepository { get; }
+
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public AbpOpenIddictApplicationStore(
         IGuidGenerator guidGenerator,
         IOpenIddictApplicationRepository openIddictApplicationRepository,
-        IOpenIddictAuthorizationRepository openIddictAuthorizationRepository,
-        IOpenIddictTokenRepository openIddictTokenRepository)
+        IUnitOfWorkManager unitOfWorkManager)
         : base(guidGenerator)
     {
         ApplicationRepository = openIddictApplicationRepository;
-        OpenIddictAuthorizationRepository = openIddictAuthorizationRepository;
-        OpenIddictTokenRepository = openIddictTokenRepository;
+        UnitOfWorkManager = unitOfWorkManager;
     }
 
     /// <inheritdoc/>
@@ -51,28 +47,42 @@ public class AbpOpenIddictApplicationStore : OpenIddictApplicationStoreBase
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask CreateAsync(OpenIddictApplication application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await ApplicationRepository.InsertAsync(application, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask UpdateAsync(OpenIddictApplication application, CancellationToken cancellationToken)
     {
-        await ApplicationRepository.UpdateAsync(application);
+        Check.NotNull(application, nameof(application));
+
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
+        await ApplicationRepository.UpdateAsync(application, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask DeleteAsync(OpenIddictApplication application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await ApplicationRepository.DeleteAsync(application, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>

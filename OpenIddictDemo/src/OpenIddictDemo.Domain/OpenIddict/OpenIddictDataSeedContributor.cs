@@ -122,19 +122,20 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 name: webClientId,
                 clientType: ClientTypes.Confidential,//need ClientSecret
                 consentType: ConsentTypes.Explicit,
-                permissions: commonPermissions
-                    .Union(new[] {
-                            Permissions.ResponseTypes.Code,
-                            Permissions.ResponseTypes.CodeIdToken
-                        //Permissions.ResponseTypes.CodeIdTokenToken,
-                        //Permissions.ResponseTypes.CodeToken,
-                        //Permissions.ResponseTypes.IdToken,
-                        //Permissions.ResponseTypes.IdTokenToken,
-                        //Permissions.ResponseTypes.Token,
-                    }),
-                grantTypes: new[] {
-                        Permissions.GrantTypes.AuthorizationCode,
-                        Permissions.GrantTypes.Implicit
+                permissions: commonPermissions.Union(new[]
+                {
+                    Permissions.ResponseTypes.Code,
+                    Permissions.ResponseTypes.CodeIdToken
+                    //Permissions.ResponseTypes.CodeIdTokenToken,
+                    //Permissions.ResponseTypes.CodeToken,
+                    //Permissions.ResponseTypes.IdToken,
+                    //Permissions.ResponseTypes.IdTokenToken,
+                    //Permissions.ResponseTypes.Token,
+                }),
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.AuthorizationCode,
+                    Permissions.GrantTypes.Implicit
                 },
                 secret: configurationSection["OpenIddictDemo_Web:ClientSecret"] ?? "1q2w3e*",
                 redirectUri: $"{webClientRootUrl}signin-oidc",
@@ -153,14 +154,16 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 name: consoleAndAngularClientId,
                 clientType: ClientTypes.Confidential,//need ClientSecret
                 consentType: ConsentTypes.Implicit,
-                permissions: commonPermissions.Union(new[] {
-                            Permissions.ResponseTypes.Code,
-                            Permissions.ResponseTypes.CodeIdToken
-                    }),
-                grantTypes: new[] {
-                        Permissions.GrantTypes.Password,
-                        Permissions.GrantTypes.ClientCredentials,
-                        Permissions.GrantTypes.AuthorizationCode
+                permissions: commonPermissions.Union(new[]
+                {
+                    Permissions.ResponseTypes.Code,
+                    Permissions.ResponseTypes.CodeIdToken
+                }),
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.Password,
+                    Permissions.GrantTypes.ClientCredentials,
+                    Permissions.GrantTypes.AuthorizationCode
                 },
                 secret: configurationSection["OpenIddictDemo_App:ClientSecret"] ?? "1q2w3e*",
                 redirectUri: webClientRootUrl
@@ -177,12 +180,14 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 name: blazorClientId,
                 clientType: ClientTypes.Public,//not require ClientSecret
                 consentType: ConsentTypes.Explicit,
-                permissions: commonPermissions.Union(new[] {
-                            Permissions.ResponseTypes.Code,
-                            Permissions.ResponseTypes.CodeIdToken,
-                    }),
-                grantTypes: new[] {
-                        Permissions.GrantTypes.AuthorizationCode
+                permissions: commonPermissions.Union(new[]
+                {
+                    Permissions.ResponseTypes.Code,
+                    Permissions.ResponseTypes.CodeIdToken,
+                }),
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.AuthorizationCode
                 },
                 redirectUri: $"{blazorRootUrl}/authentication/login-callback",
                 postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback"
@@ -199,20 +204,22 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 name: swaggerClientId,
                 clientType: ClientTypes.Confidential,//need ClientSecret
                 consentType: ConsentTypes.Explicit,
-                permissions: commonPermissions.Union(new[] {
-                            Permissions.ResponseTypes.Code,
-                            Permissions.ResponseTypes.CodeIdToken,
-                            Permissions.Endpoints.Introspection
-                    }),
-                grantTypes: new[] {
-                        Permissions.GrantTypes.AuthorizationCode
+                permissions: commonPermissions.Union(new[]
+                {
+                    Permissions.ResponseTypes.Code,
+                    Permissions.ResponseTypes.CodeIdToken,
+                    Permissions.Endpoints.Introspection
+                }),
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.AuthorizationCode
                 },
-                secret: configurationSection["OpenIddictDemo_Swagger:ClientSecret"],
+                secret: configurationSection["OpenIddictDemo_Swagger:ClientSecret"] ?? "1q2w3e*",
                 redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html"
             );
         }
 
-        // Console Test 2
+        // Console Test 2 Client Credentials
         var clientClientId = configurationSection["OpenIddictDemo_Client:ClientId"];
         if (!swaggerClientId.IsNullOrWhiteSpace())
         {
@@ -221,10 +228,31 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 clientType: ClientTypes.Confidential,//need ClientSecret
                 consentType: ConsentTypes.Implicit,
                 permissions: commonPermissions,
-                grantTypes: new[] {
-                        Permissions.GrantTypes.ClientCredentials
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.ClientCredentials
                 },
-                secret: configurationSection["OpenIddictDemo_Client:ClientSecret"],
+                secret: configurationSection["OpenIddictDemo_Client:ClientSecret"] ?? "1q2w3e*",
+                appPermissions: _permissionDefinitionManager.GetPermissions()
+            );
+        }
+
+        // Device
+        var deviceClienId = configurationSection["OpenIddictDemo_Device:ClientId"];
+        if (!swaggerClientId.IsNullOrWhiteSpace())
+        {
+            await CreateClientAsync(
+                name: deviceClienId,
+                clientType: ClientTypes.Public,//not require ClientSecret
+                consentType: ConsentTypes.Explicit,
+                permissions: commonPermissions.Union(new[]
+                {
+                    Permissions.Endpoints.Device
+                }),
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.DeviceCode
+                },
                 appPermissions: _permissionDefinitionManager.GetPermissions()
             );
         }
@@ -254,12 +282,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 ConsentType = consentType,
                 DisplayName = name,
                 Permissions =
-                    {
-                        Permissions.Endpoints.Authorization,
-                        Permissions.Endpoints.Logout,
-                        Permissions.Endpoints.Token,
-                        Permissions.GrantTypes.RefreshToken,
-                    }
+                {
+                    Permissions.Endpoints.Authorization,
+                    Permissions.Endpoints.Logout,
+                    Permissions.Endpoints.Token,
+                    Permissions.GrantTypes.RefreshToken,
+                }
             };
 
             clientObject = await _applicationManager.CreateAsync(applicationDescriptor);

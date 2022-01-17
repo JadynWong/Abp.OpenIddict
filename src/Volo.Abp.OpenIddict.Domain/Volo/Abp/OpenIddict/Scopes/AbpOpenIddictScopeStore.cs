@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
@@ -19,11 +17,15 @@ public class AbpOpenIddictScopeStore : OpenIddictScopeStoreBase
 {
     protected IOpenIddictScopeRepository ScopeRepository { get; }
 
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
     public AbpOpenIddictScopeStore(
         IGuidGenerator guidGenerator,
-        IOpenIddictScopeRepository scopeRepository) : base(guidGenerator)
+        IOpenIddictScopeRepository scopeRepository,
+        IUnitOfWorkManager unitOfWorkManager) : base(guidGenerator)
     {
         ScopeRepository = scopeRepository;
+        UnitOfWorkManager = unitOfWorkManager;
     }
 
     /// <inheritdoc/>
@@ -45,30 +47,42 @@ public class AbpOpenIddictScopeStore : OpenIddictScopeStoreBase
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask CreateAsync(OpenIddictScope scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await ScopeRepository.InsertAsync(scope, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask UpdateAsync(OpenIddictScope scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await ScopeRepository.UpdateAsync(scope, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask DeleteAsync(OpenIddictScope scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await ScopeRepository.DeleteAsync(scope, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>

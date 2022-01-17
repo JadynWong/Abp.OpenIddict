@@ -53,37 +53,51 @@ public class AbpOpenIddictTokenStore : OpenIddictTokenStoreBase
 
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask CreateAsync(OpenIddictToken token, CancellationToken cancellationToken)
     {
         Check.NotNull(token, nameof(token));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await TokenRepository.InsertAsync(token, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask UpdateAsync(OpenIddictToken token, CancellationToken cancellationToken)
     {
         Check.NotNull(token, nameof(token));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await TokenRepository.UpdateAsync(token, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask DeleteAsync(OpenIddictToken token, CancellationToken cancellationToken)
     {
         Check.NotNull(token, nameof(token));
 
+        using var unitOfWork = UnitOfWorkManager.Begin();
+
         await TokenRepository.DeleteAsync(token, true, cancellationToken);
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>
-    [UnitOfWork]
+    //[UnitOfWork]
     public override async ValueTask PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
         List<Exception> exceptions = null;
+
+        using var unitOfWork = UnitOfWorkManager.Begin();
 
         for (var index = 0; index < Options.CleanupLoopCount; index++)
         {
@@ -99,7 +113,7 @@ public class AbpOpenIddictTokenStore : OpenIddictTokenStoreBase
 
             try
             {
-                await TokenRepository.DeleteManyAsync(tokens);
+                await TokenRepository.DeleteManyAsync(tokens, true, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -112,6 +126,8 @@ public class AbpOpenIddictTokenStore : OpenIddictTokenStoreBase
         {
             throw new AggregateException(SR.GetResourceString(SR.ID0249), exceptions);
         }
+
+        await unitOfWork.CompleteAsync();
     }
 
     /// <inheritdoc/>

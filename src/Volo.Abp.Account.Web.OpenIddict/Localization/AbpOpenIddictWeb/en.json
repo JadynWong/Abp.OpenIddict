@@ -5,6 +5,12 @@
     "Deny": "Deny",
     "Submit": "Submit",
     "ScopesOfRequest": "Scopes Requested",
-    "IsRequestingAccessToYourData": "is requesting access to your data"
+    "IsRequestingAccessToYourData": "is requesting access to your data",
+    "Authorization": "Authorization",
+    "EnterTheUserCodeGivenByTheClientApplication": "Enter the user code given by the client application",
+    "AnErrorOccurred": "An error occurred",
+    "DoYouWantToGrantApplicationAccessToYourData": "Do you want to grant <strong>{0}</strong> access to your data?",
+    "MakeSureThatTheCodeDisplayedOnTheDeviceIsUserCode": "Make sure that the code displayed on the device is <strong>{0}</strong>.",
+    "IfTheTwoCodesDoNotMatchPressDenyToRejectTheAuthorizationDemand": "If the two codes don't match, press \"Deny\" to reject the authorization demand."
   }
 }
