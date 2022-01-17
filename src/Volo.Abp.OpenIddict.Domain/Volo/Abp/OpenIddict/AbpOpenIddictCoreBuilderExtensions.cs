@@ -24,37 +24,6 @@ public static class AbpOpenIddictCoreBuilderExtensions
         return coreBuilder;
     }
 
-    public static OpenIddictCoreBuilder TryAddAbpMemoryStore(this OpenIddictCoreBuilder coreBuilder)
-    {
-        if (!coreBuilder.Services.IsAdded<IOpenIddictApplicationStore<OpenIddictApplication>>())
-        {
-            coreBuilder.AddApplicationStore<InMemoryOpenIddictApplicationStore>(ServiceLifetime.Singleton);
-        }
-        if (!coreBuilder.Services.IsAdded<IOpenIddictAuthorizationStore<OpenIddictAuthorization>>())
-        {
-            coreBuilder.AddAuthorizationStore<InMemoryOpenIddictAuthorizationStore>(ServiceLifetime.Singleton);
-        }
-        if (!coreBuilder.Services.IsAdded<IOpenIddictScopeStore<OpenIddictScope>>())
-        {
-            coreBuilder.AddScopeStore<InMemoryOpenIddictScopeStore>(ServiceLifetime.Singleton);
-        }
-        if (!coreBuilder.Services.IsAdded<IOpenIddictTokenStore<OpenIddictToken>>())
-        {
-            coreBuilder.AddTokenStore<InMemoryOpenIddictTokenStore>(ServiceLifetime.Singleton);
-        }
-        return coreBuilder;
-    }
-
-    public static OpenIddictCoreBuilder AddAbpMemoryStore(this OpenIddictCoreBuilder coreBuilder)
-    {
-        coreBuilder
-            .AddApplicationStore<InMemoryOpenIddictApplicationStore>(ServiceLifetime.Singleton)
-            .AddAuthorizationStore<InMemoryOpenIddictAuthorizationStore>(ServiceLifetime.Singleton)
-            .AddScopeStore<InMemoryOpenIddictScopeStore>(ServiceLifetime.Singleton)
-            .AddTokenStore<InMemoryOpenIddictTokenStore>(ServiceLifetime.Singleton);
-        return coreBuilder;
-    }
-
     public static OpenIddictCoreBuilder AddAbpStore(this OpenIddictCoreBuilder coreBuilder)
     {
         coreBuilder

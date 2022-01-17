@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Localization;
 using Volo.Abp.Identity.AspNetCore;
-using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
@@ -94,20 +93,20 @@ public class AbpAccountWebOpenIddictModule : AbpModule
                 options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles, Scopes.Phone);
 
                 // https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                if (builderOptions.AddDeveloperSigningCredential)
+                if (builderOptions.AddDevelopmentCredentials)
                 {
                     // Register the signing and encryption credentials.
                     options
-                    .AddDevelopmentEncryptionCertificate()
-                    .AddDevelopmentSigningCertificate();
+                        .AddDevelopmentEncryptionCertificate()
+                        .AddDevelopmentSigningCertificate();
                 }
 
-                if (builderOptions.AddEphemeralEncryptionKey)
+                if (builderOptions.AddEphemeralCredentials)
                 {
                     // Registering an ephemeral key.
                     options
-                    .AddEphemeralEncryptionKey()
-                    .AddEphemeralSigningKey();
+                        .AddEphemeralEncryptionKey()
+                        .AddEphemeralSigningKey();
                 }
 
                 if (builderOptions.RequireProofKeyForCodeExchange)

@@ -40,8 +40,6 @@ public class AbpOpenIddictDomainModule : AbpModule
         services.ExecutePreConfiguredActions(openIddictBuilder);
 
         services.ExecutePreConfiguredActions(openIddictCoreBuilder);
-
-        openIddictCoreBuilder.TryAddAbpMemoryStore();
     }
 
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
