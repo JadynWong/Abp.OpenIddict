@@ -1,4 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -19,9 +22,15 @@ public class OpenIddictSupportedLogoutModel : LogoutModel
 
         var request = HttpContext.GetOpenIddictServerRequest();
 
-        if (request != null)
+        if (request?.PostLogoutRedirectUri?.IsNullOrWhiteSpace() == false)
         {
-            await SaveSecurityLogAsync(request?.ClientId);
+            var clientId = request.ClientId;
+            if (clientId.IsNullOrWhiteSpace() && !request.IdTokenHint.IsNullOrWhiteSpace())
+            {
+                var idToken = new JwtSecurityToken(request.IdTokenHint);
+                clientId = idToken.Claims.FirstOrDefault(x => x.Type == "azp")?.Value;
+            }
+            await SaveSecurityLogAsync(clientId);
 
             await SignInManager.SignOutAsync();
             await HttpContext.SignOutAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
