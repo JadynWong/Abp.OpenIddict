@@ -144,28 +144,45 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             );
         }
 
-        //Console Test / Angular Client
-        var consoleAndAngularClientId = configurationSection["OpenIddictDemo_App:ClientId"];
-        if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
+        //Console Test
+        var consoleClientId = configurationSection["OpenIddictDemo_App:ClientId"];
+        if (!consoleClientId.IsNullOrWhiteSpace())
         {
             var webClientRootUrl = configurationSection["OpenIddictDemo_App:RootUrl"]?.TrimEnd('/');
 
             await CreateClientAsync(
-                name: consoleAndAngularClientId,
+                name: consoleClientId,
                 clientType: ClientTypes.Confidential,//need ClientSecret
                 consentType: ConsentTypes.Implicit,
-                permissions: commonPermissions.Union(new[]
-                {
-                    Permissions.ResponseTypes.Code,
-                    Permissions.ResponseTypes.CodeIdToken
-                }),
+                permissions: commonPermissions,
                 grantTypes: new[]
                 {
                     Permissions.GrantTypes.Password,
                     Permissions.GrantTypes.ClientCredentials,
-                    Permissions.GrantTypes.AuthorizationCode
                 },
                 secret: configurationSection["OpenIddictDemo_App:ClientSecret"] ?? "1q2w3e*",
+                redirectUri: webClientRootUrl
+            );
+        }
+
+        //Angular Client
+        var angularClientId = configurationSection["OpenIddictDemo_Angular:ClientId"];
+        if (!angularClientId.IsNullOrWhiteSpace())
+        {
+            var webClientRootUrl = configurationSection["OpenIddictDemo_Angular:RootUrl"]?.TrimEnd('/');
+
+            await CreateClientAsync(
+                name: angularClientId,
+                clientType: ClientTypes.Public,//not require ClientSecret
+                consentType: ConsentTypes.Explicit,
+                permissions: commonPermissions.Union(new[]
+                {
+                    Permissions.ResponseTypes.Code
+                }),
+                grantTypes: new[]
+                {
+                    Permissions.GrantTypes.AuthorizationCode
+                },
                 redirectUri: webClientRootUrl
             );
         }
