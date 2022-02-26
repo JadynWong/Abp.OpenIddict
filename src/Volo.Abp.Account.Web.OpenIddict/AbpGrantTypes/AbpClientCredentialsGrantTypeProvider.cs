@@ -9,6 +9,7 @@ using OpenIddict.Abstractions;
 using Volo.Abp.Account.Web.Localization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -27,6 +28,8 @@ public class AbpClientCredentialsGrantTypeProvider : IGrantTypeProvider, ITransi
 
     protected IOpenIddictDestinationService OpenIddictDestinationService { get; }
 
+    protected ICurrentTenant CurrentTenant { get; }
+
     protected IAbpLazyServiceProvider LazyServiceProvider { get; }
 
     protected IStringLocalizer<AbpOpenIddictWebResource> L { get; }
@@ -38,6 +41,7 @@ public class AbpClientCredentialsGrantTypeProvider : IGrantTypeProvider, ITransi
         IOpenIddictScopeManager scopeManager,
         IdentitySecurityLogManager identitySecurityLogManager,
         IOpenIddictDestinationService openIddictDestinationService,
+        ICurrentTenant currentTenant,
         IAbpLazyServiceProvider lazyServiceProvider,
         IStringLocalizer<AbpOpenIddictWebResource> localizer)
     {
@@ -45,6 +49,7 @@ public class AbpClientCredentialsGrantTypeProvider : IGrantTypeProvider, ITransi
         ScopeManager = scopeManager;
         IdentitySecurityLogManager = identitySecurityLogManager;
         OpenIddictDestinationService = openIddictDestinationService;
+        CurrentTenant = currentTenant;
         LazyServiceProvider = lazyServiceProvider;
         L = localizer;
         Logger = NullLogger<AbpClientCredentialsGrantTypeProvider>.Instance;
@@ -58,6 +63,8 @@ public class AbpClientCredentialsGrantTypeProvider : IGrantTypeProvider, ITransi
         var application =
             await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
             throw new AbpException("The application cannot be found.");
+
+        Logger.LogInformation("Credentials validated for clientId: {clientId}", request.ClientId);
 
         // Create a new ClaimsIdentity containing the claims that
         // will be used to create an id_token, a token or a code.
@@ -82,9 +89,21 @@ public class AbpClientCredentialsGrantTypeProvider : IGrantTypeProvider, ITransi
 
         var principal = new ClaimsPrincipal(identity);
 
+        await AddCustomClaimsAsync(principal, request);
+
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await ScopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());
 
         return GrantTypeResult.SuccessResult(principal);
+    }
+
+    protected virtual Task AddCustomClaimsAsync(ClaimsPrincipal principal, OpenIddictRequest request)
+    {
+        if (CurrentTenant.IsAvailable)
+        {
+            principal.SetClaim(AbpClaimTypes.TenantId, CurrentTenant.Id?.ToString());
+        }
+
+        return Task.CompletedTask;
     }
 }

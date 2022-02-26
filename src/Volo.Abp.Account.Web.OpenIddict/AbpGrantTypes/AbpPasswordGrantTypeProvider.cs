@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
@@ -12,7 +13,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.OpenIddict;
-using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Validation;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -156,14 +156,7 @@ public class AbpPasswordGrantTypeProvider : IGrantTypeProvider, ITransientDepend
 
         var principal = await SignInManager.CreateUserPrincipalAsync(user);
 
-        if (user.TenantId.HasValue)
-        {
-            principal.SetClaim(AbpClaimTypes.TenantId, user.TenantId?.ToString());
-        }
-
-        // Note: in this sample, the granted scopes match the requested scope
-        // but you may want to allow the user to uncheck specific scopes.
-        // For that, simply restrict the list of scopes before calling SetScopes.
+        await AddCustomClaimsAsync(principal, user, request);
 
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await ScopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());
@@ -245,5 +238,15 @@ public class AbpPasswordGrantTypeProvider : IGrantTypeProvider, ITransientDepend
         }
 
         request.Username = userByEmail.UserName;
+    }
+
+    protected virtual Task AddCustomClaimsAsync(ClaimsPrincipal principal, IdentityUser user, OpenIddictRequest request)
+    {
+        if (user.TenantId.HasValue)
+        {
+            principal.SetClaim(AbpClaimTypes.TenantId, user.TenantId?.ToString());
+        }
+
+        return Task.CompletedTask;
     }
 }
