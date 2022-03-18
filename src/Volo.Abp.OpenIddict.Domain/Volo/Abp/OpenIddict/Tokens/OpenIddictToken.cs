@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.OpenIddict.Tokens;
@@ -17,7 +18,7 @@ public class OpenIddictToken : AggregateRoot<Guid>
 
     public string Payload { get; protected set; }
 
-    //JSON object
+    [NotNull]
     public Dictionary<string, JsonElement> Properties { get; protected set; }
 
     public DateTime? RedemptionDate { get; protected set; }
@@ -62,8 +63,10 @@ public class OpenIddictToken : AggregateRoot<Guid>
         Payload = payload;
     }
 
-    public void SetProperties(Dictionary<string, JsonElement> properties)
+    public void SetProperties([NotNull] Dictionary<string, JsonElement> properties)
     {
+        Check.NotNull(properties, nameof(properties));
+
         Properties = properties;
     }
 
@@ -74,21 +77,21 @@ public class OpenIddictToken : AggregateRoot<Guid>
 
     public void SetReferenceId(string referenceId)
     {
-        ReferenceId = referenceId;
+        ReferenceId = Check.Length(referenceId, nameof(referenceId), OpenIddictTokenConst.ReferenceIdMaxLength);
     }
 
     public void SetStatus(string status)
     {
-        Status = status;
+        Status = Check.Length(status, nameof(status), OpenIddictTokenConst.StatusMaxLength);
     }
 
     public void SetSubject(string subject)
     {
-        Subject = subject;
+        Subject = Check.Length(subject, nameof(subject), OpenIddictTokenConst.SubjectMaxLength);
     }
 
     public void SetType(string type)
     {
-        Type = type;
+        Type = Check.Length(type, nameof(type), OpenIddictTokenConst.TypeMaxLength);
     }
 }

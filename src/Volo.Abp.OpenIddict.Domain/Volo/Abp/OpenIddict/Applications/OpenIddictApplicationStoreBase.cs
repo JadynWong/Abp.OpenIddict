@@ -126,7 +126,10 @@ public abstract class OpenIddictApplicationStoreBase : IOpenIddictApplicationSto
             return new ValueTask<ImmutableDictionary<CultureInfo, string>>(ImmutableDictionary.Create<CultureInfo, string>());
         }
 
-        return new(application.DisplayNames.ToImmutableDictionary());
+        return new(application.DisplayNames
+            .ToDictionary(dn => new CultureInfo(dn.Key), dn => dn.Value)
+            .ToImmutableDictionary()
+        );
     }
 
     /// <inheritdoc/>
@@ -306,7 +309,7 @@ public abstract class OpenIddictApplicationStoreBase : IOpenIddictApplicationSto
     {
         Check.NotNull(application, nameof(application));
 
-        application.SetDisplayNames(new Dictionary<CultureInfo, string>(names));
+        application.SetDisplayNames(names.ToDictionary(n => n.Key.Name, n => n.Value));
         return default;
     }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text.Json;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.OpenIddict.Scopes;
@@ -10,20 +10,20 @@ public class OpenIddictScope : AggregateRoot<Guid>
 {
     public string Description { get; protected set; }
 
-    //JSON Object
-    public Dictionary<CultureInfo, string> Descriptions { get; protected set; }
+    [NotNull]
+    public Dictionary<string, string> Descriptions { get; protected set; }
 
     public string DisplayName { get; protected set; }
 
-    //JSON Object
-    public Dictionary<CultureInfo, string> DisplayNames { get; protected set; }
+    [NotNull]
+    public Dictionary<string, string> DisplayNames { get; protected set; }
 
     public string Name { get; protected set; }
 
-    //JSON Object
+    [NotNull]
     public Dictionary<string, JsonElement> Properties { get; protected set; }
 
-    //JSON array
+    [NotNull]
     public HashSet<string> Resources { get; protected set; }
 
     protected OpenIddictScope() { }
@@ -37,36 +37,44 @@ public class OpenIddictScope : AggregateRoot<Guid>
 
     public void SetDescription(string description)
     {
-        Description = description;
+        Description = Check.Length(description, nameof(description), OpenIddictScopeConst.DescriptionMaxLength);
     }
 
     public void SetDisplayName(string displayName)
     {
-        DisplayName = displayName;
+        DisplayName = Check.Length(displayName, nameof(displayName), OpenIddictScopeConst.DisplayNameMaxLength);
     }
 
     public void SetName(string name)
     {
-        Name = name;
+        Name = Check.Length(name, nameof(name), OpenIddictScopeConst.NameMaxLength);
     }
 
-    public void SetDisplayNames(Dictionary<CultureInfo, string> names)
+    public void SetDisplayNames([NotNull] Dictionary<string, string> names)
     {
+        Check.NotNull(names, nameof(names));
+
         DisplayNames = names;
     }
 
-    public void SetDescriptions(Dictionary<CultureInfo, string> descriptions)
+    public void SetDescriptions([NotNull] Dictionary<string, string> descriptions)
     {
+        Check.NotNull(descriptions, nameof(descriptions));
+
         Descriptions = descriptions;
     }
 
-    public void SetResources(HashSet<string> resources)
+    public void SetResources([NotNull] HashSet<string> resources)
     {
+        Check.NotNull(resources, nameof(resources));
+
         Resources = resources;
     }
 
-    public void SetProperties(Dictionary<string, JsonElement> properties)
+    public void SetProperties([NotNull] Dictionary<string, JsonElement> properties)
     {
+        Check.NotNull(properties, nameof(properties));
+
         Properties = properties;
     }
 }

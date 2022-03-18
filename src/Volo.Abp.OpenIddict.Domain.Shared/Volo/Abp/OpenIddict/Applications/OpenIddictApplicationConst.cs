@@ -8,7 +8,7 @@ public static class OpenIddictApplicationConst
     public static int ClientIdMaxLength = 100;
 
     /// <summary>
-    /// Default Value: 256
+    /// Default Value: 128
     /// </summary>
     public static int ClientSecretMaxLength = 128;
 

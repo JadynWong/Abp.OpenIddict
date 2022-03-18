@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.OpenIddict.OpenIddictApplications;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
@@ -16,22 +18,22 @@ public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
 
     public string DisplayName { get; protected set; }
 
-    //JSON Object
-    public Dictionary<CultureInfo, string> DisplayNames { get; protected set; }
+    [NotNull]
+    public Dictionary<string, string> DisplayNames { get; protected set; }
 
-    //JSON Array
+    [NotNull]
     public HashSet<string> Permissions { get; protected set; }
 
-    //JSON Array
+    [NotNull]
     public HashSet<string> PostLogoutRedirectUris { get; protected set; }
 
-    //JSON Object
+    [NotNull]
     public Dictionary<string, JsonElement> Properties { get; protected set; }
 
-    //JSON Array
+    [NotNull]
     public HashSet<string> RedirectUris { get; protected set; }
 
-    //JSON Array
+    [NotNull]
     public HashSet<string> Requirements { get; protected set; }
 
     public string Type { get; protected set; }
@@ -41,7 +43,7 @@ public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
     public OpenIddictApplication(Guid id, string clientId)
     : base(id)
     {
-        ClientId = clientId;
+        SetClientId(clientId);
         DisplayNames = new();
         Permissions = new();
         PostLogoutRedirectUris = new();
@@ -50,58 +52,70 @@ public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
         Requirements = new();
     }
 
-    public void SetClientId(string identifier)
+    public void SetClientId([NotNull] string clientId)
     {
-        ClientId = identifier;
+        ClientId = Check.NotNullOrWhiteSpace(clientId, nameof(clientId), OpenIddictApplicationConst.ClientIdMaxLength);
     }
 
     public void SetClientSecret(string secret)
     {
-        ClientSecret = secret;
+        ClientSecret = Check.Length(secret, nameof(secret), OpenIddictApplicationConst.ClientSecretMaxLength);
     }
 
     public void SetClientType(string type)
     {
-        Type = type;
+        Type = Check.Length(type, nameof(type), OpenIddictApplicationConst.TypeMaxLength);
     }
 
-    public void SetConsentType(string type)
+    public void SetConsentType(string consentType)
     {
-        ConsentType = type;
+        ConsentType = Check.Length(consentType, nameof(consentType), OpenIddictApplicationConst.ConsentTypeMaxLength);
     }
 
-    public void SetDisplayName(string name)
+    public void SetDisplayName(string displayName)
     {
-        DisplayName = name;
+        DisplayName = Check.Length(displayName, nameof(displayName), OpenIddictApplicationConst.DisplayNameMaxLength);
     }
 
-    public void SetDisplayNames(Dictionary<CultureInfo, string> displayNames)
+    public void SetDisplayNames(Dictionary<string, string> displayNames)
     {
-        DisplayNames = new Dictionary<CultureInfo, string>(displayNames);
+        Check.NotNull(displayNames, nameof(displayNames));
+
+        DisplayNames = displayNames;
     }
 
-    public void SetPermissions(HashSet<string> permissions)
+    public void SetPermissions([NotNull] HashSet<string> permissions)
     {
+        Check.NotNull(permissions, nameof(permissions));
+
         Permissions = permissions;
     }
 
-    public void SetPostLogoutRedirectUris(HashSet<string> addresses)
+    public void SetPostLogoutRedirectUris([NotNull] HashSet<string> addresses)
     {
+        Check.NotNull(addresses, nameof(addresses));
+
         PostLogoutRedirectUris = addresses;
     }
 
-    public void SetProperties(Dictionary<string, JsonElement> properties)
+    public void SetProperties([NotNull] Dictionary<string, JsonElement> properties)
     {
-        Properties = new Dictionary<string, JsonElement>(properties);
+        Check.NotNull(properties, nameof(properties));
+
+        Properties = properties;
     }
 
-    public void SetRedirectUris(HashSet<string> addresses)
+    public void SetRedirectUris([NotNull] HashSet<string> addresses)
     {
+        Check.NotNull(addresses, nameof(addresses));
+
         RedirectUris = addresses;
     }
 
-    public void SetRequirements(HashSet<string> requirements)
+    public void SetRequirements([NotNull] HashSet<string> requirements)
     {
+        Check.NotNull(requirements, nameof(requirements));
+
         Requirements = requirements;
     }
 }

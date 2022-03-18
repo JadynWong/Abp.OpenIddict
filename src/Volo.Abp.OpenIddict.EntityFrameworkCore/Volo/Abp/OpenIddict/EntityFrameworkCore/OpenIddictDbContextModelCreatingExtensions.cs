@@ -6,6 +6,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Authorizations;
+using Volo.Abp.OpenIddict.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.OpenIddict.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.OpenIddict.OpenIddictApplications;
 using Volo.Abp.OpenIddict.Scopes;
@@ -45,23 +46,23 @@ public static class OpenIddictDbContextModelCreatingExtensions
             b.Property(x => x.DisplayName)
                 .HasMaxLength(OpenIddictApplicationConst.DisplayNameMaxLength);
             b.Property(x => x.PostLogoutRedirectUris)
-                .HasConversion(new AbpJsonValueConverter<HashSet<string>>())
-                .Metadata.SetValueComparer(new HashSetStringValueComparter());
+                .HasConversion(new JsonValueConverter<HashSet<string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<HashSet<string>>());
             b.Property(x => x.RedirectUris)
-                .HasConversion(new AbpJsonValueConverter<HashSet<string>>())
-                .Metadata.SetValueComparer(new HashSetStringValueComparter());
+                .HasConversion(new JsonValueConverter<HashSet<string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<HashSet<string>>());
             b.Property(x => x.DisplayNames)
-                .HasConversion(new CultureInfoStringDictionaryValueConverter())
-                .Metadata.SetValueComparer(new CultureInfoStringDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, string>>());
             b.Property(x => x.Requirements)
-                .HasConversion(new AbpJsonValueConverter<HashSet<string>>())
-                .Metadata.SetValueComparer(new HashSetStringValueComparter());
+                .HasConversion(new JsonValueConverter<HashSet<string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<HashSet<string>>());
             b.Property(x => x.Permissions)
-                .HasConversion(new AbpJsonValueConverter<HashSet<string>>())
-                .Metadata.SetValueComparer(new HashSetStringValueComparter());
+                .HasConversion(new JsonValueConverter<HashSet<string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<HashSet<string>>());
             b.Property(x => x.Properties)
-                .HasConversion(new AbpJsonValueConverter<Dictionary<string, JsonElement>>())
-                .Metadata.SetValueComparer(new StringJsonElementDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, JsonElement>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, JsonElement>>());
             b.Property(x => x.Type)
                 .HasMaxLength(OpenIddictApplicationConst.TypeMaxLength);
 
@@ -80,11 +81,11 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
             /* Configure more properties here */
             b.Property(x => x.Properties)
-                .HasConversion(new AbpJsonValueConverter<Dictionary<string, JsonElement>>())
-                .Metadata.SetValueComparer(new StringJsonElementDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, JsonElement>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, JsonElement>>());
             b.Property(x => x.Scopes)
-                .HasConversion(new AbpJsonValueConverter<HashSet<string>>())
-                .Metadata.SetValueComparer(new HashSetStringValueComparter());
+                .HasConversion(new JsonValueConverter<HashSet<string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<HashSet<string>>());
             b.Property(x => x.Status)
                 .HasMaxLength(OpenIddictAuthorizationConst.StatusMaxLength);
             b.Property(x => x.Subject)
@@ -114,21 +115,21 @@ public static class OpenIddictDbContextModelCreatingExtensions
             b.Property(x => x.Description)
                 .HasMaxLength(OpenIddictScopeConst.DescriptionMaxLength);
             b.Property(x => x.Descriptions)
-                .HasConversion(new CultureInfoStringDictionaryValueConverter())
-                .Metadata.SetValueComparer(new CultureInfoStringDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, string>>());
             b.Property(x => x.DisplayName)
                 .HasMaxLength(OpenIddictScopeConst.DisplayNameMaxLength);
             b.Property(x => x.DisplayNames)
-                .HasConversion(new CultureInfoStringDictionaryValueConverter())
-                .Metadata.SetValueComparer(new CultureInfoStringDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, string>>());
             b.Property(x => x.Name)
                 .HasMaxLength(OpenIddictScopeConst.NameMaxLength);
             b.Property(x => x.Properties)
-                .HasConversion(new AbpJsonValueConverter<Dictionary<string, JsonElement>>())
-                .Metadata.SetValueComparer(new StringJsonElementDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, JsonElement>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, JsonElement>>());
             b.Property(x => x.Resources)
-                .HasConversion(new AbpJsonValueConverter<HashSet<string>>())
-                .Metadata.SetValueComparer(new HashSetStringValueComparter());
+                .HasConversion(new JsonValueConverter<HashSet<string>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<HashSet<string>>());
 
             b.ConfigureObjectExtensions();
         });
@@ -142,8 +143,8 @@ public static class OpenIddictDbContextModelCreatingExtensions
 
             /* Configure more properties here */
             b.Property(x => x.Properties)
-                .HasConversion(new AbpJsonValueConverter<Dictionary<string, JsonElement>>())
-                .Metadata.SetValueComparer(new StringJsonElementDictionaryValueComparter());
+                .HasConversion(new JsonValueConverter<Dictionary<string, JsonElement>>())
+                .Metadata.SetValueComparer(new JsonValueComparer<Dictionary<string, JsonElement>>());
             b.Property(x => x.ReferenceId)
                 .HasMaxLength(OpenIddictTokenConst.ReferenceIdMaxLength);
             b.Property(x => x.Status)

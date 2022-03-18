@@ -78,7 +78,10 @@ public abstract class OpenIddictScopeStoreBase : IOpenIddictScopeStore<OpenIddic
             return new ValueTask<ImmutableDictionary<CultureInfo, string>>(ImmutableDictionary.Create<CultureInfo, string>());
         }
 
-        return new(scope.Descriptions.ToImmutableDictionary());
+        return new(scope.Descriptions
+            .ToDictionary(d => new CultureInfo(d.Key), dn => dn.Value)
+            .ToImmutableDictionary()
+        );
     }
 
     /// <inheritdoc/>
@@ -101,7 +104,10 @@ public abstract class OpenIddictScopeStoreBase : IOpenIddictScopeStore<OpenIddic
             return new ValueTask<ImmutableDictionary<CultureInfo, string>>(ImmutableDictionary.Create<CultureInfo, string>());
         }
 
-        return new(scope.DisplayNames.ToImmutableDictionary());
+        return new(scope.DisplayNames
+            .ToDictionary(dn => new CultureInfo(dn.Key), dn => dn.Value)
+            .ToImmutableDictionary()
+        );
     }
 
     /// <inheritdoc/>
@@ -190,7 +196,7 @@ public abstract class OpenIddictScopeStoreBase : IOpenIddictScopeStore<OpenIddic
     {
         Check.NotNull(scope, nameof(scope));
 
-        scope.SetDescriptions(new Dictionary<CultureInfo, string>(descriptions));
+        scope.SetDescriptions(descriptions.ToDictionary(d => d.Key.Name, d => d.Value));
 
         return default;
     }
@@ -212,7 +218,7 @@ public abstract class OpenIddictScopeStoreBase : IOpenIddictScopeStore<OpenIddic
     {
         Check.NotNull(scope, nameof(scope));
 
-        scope.SetDisplayNames(new Dictionary<CultureInfo, string>(names));
+        scope.SetDisplayNames(names.ToDictionary(n => n.Key.Name, n => n.Value));
 
         return default;
     }
